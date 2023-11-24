@@ -37,7 +37,7 @@ public class TravelRecommender {
         return selectedOptions;
     }
 public static void main(String[] args){
-        List<TravelOption> options = new ArrayList<>();
+        List<TravelOption> options = new ArrayList<>(); // List for travel options
         options.add(new TravelOption("Hotel A", 8.5, 150,1));
         options.add(new TravelOption("Restaurant B",9.0,50,2));
         options.add(new TravelOption("Destination C",9.5,200,4));
@@ -48,7 +48,7 @@ public static void main(String[] args){
 
 
 
-    UserPreferences preferences = new UserPreferences(1500,5);
+    UserPreferences preferences = new UserPreferences(1500,5); // budget and time of the user
         List<TravelOption> recommendedOptions = knapsack(preferences,options);
 
         for (TravelOption option:recommendedOptions){
