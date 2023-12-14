@@ -43,12 +43,12 @@ public static void main(String[] args){
         options.add(new TravelOption("Destination C",9.5,200,4));
         options.add(new TravelOption("Crisologo Museum",8.0,350,2));
         options.add(new TravelOption("Bantay Bell Tower",9.0,200,2));
-        options.add(new TravelOption("Sky Ranch",5.0,40,3));
         options.add(new TravelOption("Hotel B",7.5,200,4));
+        options.add(new TravelOption("Calle Crisologo",5.9,200,5));
 
 
 
-    UserPreferences preferences = new UserPreferences(1500,5); // budget and time of the user
+    UserPreferences preferences = new UserPreferences(500,2); // budget and time of the user
         List<TravelOption> recommendedOptions = knapsack(preferences,options);
 
         for (TravelOption option:recommendedOptions){
