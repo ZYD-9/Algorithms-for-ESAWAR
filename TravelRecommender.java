@@ -1,3 +1,4 @@
+import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -39,37 +40,37 @@ public class TravelRecommender {
     }
 
 
-    static List<List<TravelOption>> planDailyItinerary(List<TravelOption> selectedOptions,UserPreferences preferences) {
+    static List<List<TravelOption>> planDailyItinerary(List<TravelOption> selectedOptions, UserPreferences preferences) {
         List<List<TravelOption>> dailyItinerary = new ArrayList<>();
-        int dailyAvailableTime = preferences.availableTime;
+        int totalDays = preferences.availableTimeInDays; // Assuming this is the total number of days available
 
+        int dayIndex = 0;
+        while (dayIndex < totalDays && !selectedOptions.isEmpty()) {
+            int dailyAvailableTime = preferences.availableTime; // Reset available time for each day
+            List<TravelOption> daySchedule = new ArrayList<>();
 
-        List<TravelOption> daySchedule = new ArrayList<>();
-        int currentTime = preferences.startTime;
-
-        for (TravelOption option:selectedOptions){
-            if(option.timeRequired <= dailyAvailableTime){
-                daySchedule.add(option);
-                dailyAvailableTime -= option.timeRequired;
-                currentTime += option.timeRequired;
-
-
-                if (dailyAvailableTime <= 0 || currentTime >= preferences.endTime) {
-                    dailyItinerary.add(new ArrayList<>(daySchedule));
-                    daySchedule.clear();
-                    dailyAvailableTime = preferences.availableTime;
-                    currentTime = preferences.startTime;
+            // Iterator to safely remove elements while iterating
+            Iterator<TravelOption> iterator = selectedOptions.iterator();
+            while (((Iterator<?>) iterator).hasNext() && dailyAvailableTime > 0) {
+                TravelOption option = iterator.next();
+                if (option.timeRequired <= dailyAvailableTime) {
+                    daySchedule.add(option);
+                    dailyAvailableTime -= option.timeRequired;
+                    iterator.remove(); // Remove the option as it's been scheduled
                 }
             }
+
+            if (!daySchedule.isEmpty()) {
+                dailyItinerary.add(daySchedule);
+            }
+            dayIndex++; // Move to the next day
         }
 
-        if (!daySchedule.isEmpty()){
-            dailyItinerary.add(daySchedule);
-        }
         return dailyItinerary;
-
     }
-public static void main(String[] args){
+
+
+    public static void main(String[] args){
         List<TravelOption> options = new ArrayList<>(); // List for travel options
         options.add(new TravelOption("Hotel A", 8.5, 150,1,800,1900));
         options.add(new TravelOption("Restaurant B",9.0,50,2,900,1800));
