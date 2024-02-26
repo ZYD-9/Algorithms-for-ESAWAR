@@ -9,26 +9,26 @@ public class Planner {
         int N = places.size();
         int dp[][] = new int[N + 1][budget + 1];
 
-        for (int i = 0; i <= N; i++) {
-            for (int w = 0; w <=budget;w++){
-                if (i == 0 || w == 0)
-                    dp[i][w] = 0;
-                else if(places.get(i-1).cost<= w)
-                    dp[i][w] = Math.max(places.get(i-1).rating + dp[i-1][w-places.get(i-1).cost],dp[i-1][w]);
-                else
-                    dp[i][w] = dp[i-1][w];
-
+        for (Place place: places){
+            for(int d = days;d>0;d--){
+                for (int w = budget;w>=place.cost;w--){
+                    dp[d][w] = Math.max(dp[d][w],place.rating + dp[d-1][w-place.cost]);
+                }
             }
         }
+
+        List<Place>selectedPlaces = new ArrayList<>();
+        int d = days;
         int w = budget;
-        List<Place> selectedPlaces = new ArrayList<>();
-        for(int i = N; i> 0 && w > 0; i--){
-            if(dp[i][w] != dp[i-1][w]){
-                selectedPlaces.add(places.get(i-1));
-                w -= places.get(i-1).cost;
-                if(selectedPlaces.size()==days){
-                    break;
-                }
+
+        while (d>0 && w>0){
+            if(dp[d][w]!=dp[d-1][w]){
+                selectedPlaces.add(places.get(d-1));
+                w-=places.get(d-1).cost;
+                d--;
+            }
+            else{
+                d--;
             }
         }
         return selectedPlaces;
